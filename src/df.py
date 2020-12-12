@@ -1,6 +1,6 @@
-import pandas as pd
 import geopandas
-
+import pandas as pd
+import shapely
 
 def getFromDict(diccionario, mapa):
     return reduce(operator.getitem, mapa, diccionario)
@@ -30,7 +30,15 @@ def places_df(frame, category):
     return df
 
 
+def locations(radius, limit, cat_id, category ):
+    url = f'https://api.foursquare.com/v2/venues/explore?&client_id={client_id}&client_secret={client_secret}&v={version}&ll=40.446067,-3.691247&radius={radius}&limit={limit}&categoryId={cat_id}'
+    x = extract(url)
+    return places_df(x, category)
 
-def geo_frame(frame):
-    return geopandas.GeoDataFrame(
-        frame, geometry=geopandas.points_from_xy(frame.longitud, frame.latitud))
+
+def geo_frame(df):
+
+    df = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(df.latitude, df.longitude))
+    df['geometry']=df['geometry'].apply(lambda x:shapely.geometry.mapping(x))
+
+    return df
