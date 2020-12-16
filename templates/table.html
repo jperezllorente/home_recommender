@@ -1,10 +1,14 @@
 <!doctype html>
 <title>Simple tables</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+<form>
+ <input type="button" value="Back to menu" onclick="history.go(-1)">
+</form>
+
+<link rel=stylesheet type=text/css>
 <div class=page>
-  <h1>Homes available</h1>
+  <h1 style="font-family:verdana; text-align:center; font-size:150%;" margin-bottom="15px;"> Available Homes for Rent </h1>
   {% for table in tables %}
-    <h2>{{titles[loop.index]}}</h2>
     {{ table|safe }}
   {% endfor %}
 </div>
