@@ -1,19 +1,22 @@
-<head>
-    SWEET SPOT
-</head>
+<h1 style="font-family:verdana; text-align:center; font-size:150%;" margin-bottom="25px;"> Your Right Place on Earth </h1>
+
 <p>
-    Welcome to Sweet Spot, the site that shows you the available homes that fit you perfectly.
+    Welcome to Your Right Place on Earth, the site that shows you the available homes that fit you perfectly.
 </p>
 <p>
     As you can see, there are 6 deployable menus that offer different options. Please, select one
     of each and click either "Map" or "Table". The first one will show you the results of your search
-    displayed as a location map. The the second one will display a table with the information of
-    the different homes available at the moment.
+    displayed as a location map. The  second one will display a table with the information of
+    the different homes currently available.
 </p>
 <p>
     At the moment we can only show one of them at a time, so if you want to check both of them,
-    you can go back to this page using the "Back to Menu" button you will find at the top left corner,
+    you can go back to this page using the "Back to Menu" button you will find at the top left corner
     and choose the other option afterwards.
+</p>
+<p>
+    In order to help you in your search, you will find below a table with a summary of prices by districts. Remember
+    that if you search out of bounds you won't get any results
 </p>
 
 
@@ -56,10 +59,24 @@
     {% endfor %}
     </SELECT>
 
+    <SELECT name="price" method="GET" action="/">
+    <OPTION value="{{price_list[0]}}" SELECTED>{{price_list[0]}}</OPTION>
+    {% for category in price_list[1:] %}
+    <option value="{{category}}">{{category}}</option>
+    {% endfor %}
+    </SELECT>
+
     <button type="submit" formaction="/input">Map</button>
     <button type="submit" formaction="/table">Table</button>
 
 </form>
+<div class=page>
+  <h1 style="font-family:verdana; font-size:100%;" margin-bottom="15px;"> Summary </h1>
+  {% for table in tables %}
+    {{ table|safe }}
+  {% endfor %}
+</div>
+
 
 
 

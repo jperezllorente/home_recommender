@@ -5,15 +5,15 @@ from pymongo import MongoClient, GEOSPHERE
 from configuration.config import homes, places
 from src.frame import geo_frame
 
-x = pd.DataFrame(homes.find({},{"_id":0, "geometry":0, "province":0, "municipality":0, "showAddress":0}))
+x = pd.DataFrame(homes.find({}, {"_id": 0, "geometry": 0, "province": 0, "municipality": 0, "showAddress": 0}))
 x = geo_frame(x)
-test = x.sample(n=500)
+test = x.sample(n=3500)
 coordinates = [list(i["coordinates"]) for i in test.geometry]
 
 
 def lugar(coords, categ, radio):
     '''
-    With this function we make queries to the "places" colleciton of our DataBase. This is te first step towards creating
+    With this function we make queries to the "places" collection of our DataBase. This is te first step towards creating
     the final function that will give us the results we want.
 
     It take as arguments the coordinates (in this case we will use the coordiantes of the homes found in our collection)
@@ -30,7 +30,6 @@ def lugar(coords, categ, radio):
 
 
 def sum_gym(coords):
-
     '''
     This is the funciton that will return all the objects that have the gym category. Inside the function we use the
     previous one, "lugar", and we use the results obtained to get the homes using a query from that will get the
@@ -52,7 +51,7 @@ def sum_gym(coords):
 
 
 def sum_rest(coords):
-    result = coords, len(lugar(coords, "restaurant_nightlife", 700))
+    result = coords, len(lugar(coords, "restaurant_nightlife", 1000))
     if result[1] > 7:
         r = homes.find_one({"latitude": result[0][0], "longitude": result[0][1]}, {"_id": 0, "province": 0,
                                                                                    "municipality": 0, "geometry": 0})
@@ -72,7 +71,7 @@ def sum_superm(coords):
 
 
 def sum_medical(coords):
-    result = coords, len(lugar(coords, "medical_centre", 5000))
+    result = coords, len(lugar(coords, "medical_centre", 3000))
     if result[1] > 1:
         r = homes.find_one({"latitude": result[0][0], "longitude": result[0][1]}, {"_id": 0, "province": 0,
                                                                                    "municipality": 0, "geometry": 0})
@@ -93,7 +92,7 @@ def sum_transport(coords):
 
 def sum_ent(coords):
     result = coords, len(lugar(coords, "general_entertainment", 1500))
-    if result[1] > 5:
+    if result[1] > 7:
         r = homes.find_one({"latitude": result[0][0], "longitude": result[0][1]}, {"_id": 0, "province": 0,
                                                                                    "municipality": 0, "geometry": 0})
         return r
@@ -132,7 +131,6 @@ def sum_school(coords):
 
 
 def category(choice):
-
     '''
     This function executes the proper function depending on what we want to look for.
 
@@ -171,7 +169,6 @@ def category(choice):
 
 
 def final(district, cat_1, cat_2, cat_3, proptype, price):
-
     '''
     This is the function that will return the homes based on the set criteria.
 
@@ -186,42 +183,30 @@ def final(district, cat_1, cat_2, cat_3, proptype, price):
     fulfill all three categories, and then we delete duplicates.
     '''
 
-    lista = []
+    lista = [category(cat_1), category(cat_2), category(cat_3)]
 
-    lista.append(category(cat_1))
-    lista.append(category(cat_2))
-    lista.append(category(cat_3))
-
-    x = pd.DataFrame(lista[0])
-    y = pd.DataFrame(lista[1])
-    z = pd.DataFrame(lista[2])
-
-    result = pd.concat([x, y, z])
+    result = pd.concat([pd.DataFrame(lista[0]), pd.DataFrame(lista[1]), pd.DataFrame(lista[2])])
 
     result = result[(result["district"] == district) & (result["propertyType"] == proptype)]
 
-    if price == "Lower than 1K":
+    # In the section below I have set the conditions for home selection based on price range
 
+    if price == "Lower than 1K":
         result = result[result["price"] <= 1000]
 
     elif price == "Between 1K and 2K":
-
         result = result[(result.price > 1000) & (result.price <= 2000)]
 
     elif price == "Between 2K and 3K":
-
         result = result[(result.price > 2000) & (result.price <= 3000)]
 
     elif price == "Between 3K and 4K":
-
         result = result[(result.price > 3000) & (result.price <= 4000)]
 
     elif price == "Between 4K and 5K":
-
-        result = result = result[(result.price > 4000) & (result.price <= 5000)]
+        result = result[(result.price > 4000) & (result.price <= 5000)]
 
     elif price == "Greater than 5K":
-
         result = result = result[(result.price > 5000)]
 
     return result[result.groupby('latitude').latitude.transform('count') > 1].drop_duplicates(subset="latitude",
