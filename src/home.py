@@ -7,7 +7,7 @@ from src.frame import geo_frame
 
 x = pd.DataFrame(homes.find({}, {"_id": 0, "geometry": 0, "province": 0, "municipality": 0, "showAddress": 0}))
 x = geo_frame(x)
-test = x.sample(n=3500)
+test = x.sample(n=1500)
 coordinates = [list(i["coordinates"]) for i in test.geometry]
 
 
@@ -209,5 +209,7 @@ def final(district, cat_1, cat_2, cat_3, proptype, price):
     elif price == "Greater than 5K":
         result = result = result[(result.price > 5000)]
 
+    # This line of code selects only those rows that appear two or more times and deletes the duplicates to keep only
+    # one instance of each element
     return result[result.groupby('latitude').latitude.transform('count') > 1].drop_duplicates(subset="latitude",
                                                                                               keep='first')
