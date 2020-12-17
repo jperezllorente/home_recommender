@@ -1,5 +1,9 @@
 # YOUR RIGHT PLACE ON EARTH 
 
+<p align="center">
+  <img width="460" height="200" src="https://techbeacon.com/sites/default/files/styles/social/public/field/image/google-location-privacy.jpg?itok=g3oTUeP2">
+</p>
+
 ## Overview
 As a final project for the Ironhack bootcamp on Data Analytics I decided to create a home recommender that would tak into account, 
 not only the characteristics of the house, but also the characteristics of the area in which it is located. This means that 
@@ -51,7 +55,7 @@ at least two of the three categories. At the beggining I wanted to select only t
 decided to change the limit. Also, with the objective of creating a better recommender, I added three more variables related to the characteristics of the selected houses. 
 
 The criteria a user can choose from are:
-- Category_1, Categroy_2 and Category_3: each of this have their own scrolling menu and created their own dataframe to be concatenated later
+- Category_1, Categroy_2 and Category_3: each of this have their own scrolling menu and dataframe to be concatenated later
 - District: in which district oyu want te he house to be located
 - Price: the range of prices between which you are interested in
 - Property Type: flat, duplex or penthouse
