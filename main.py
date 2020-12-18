@@ -85,7 +85,7 @@ def info():
         return render_template("error.html")
 
     result = result.drop(["latitude", "longitude", "Unnamed: 0"], axis=1)
-    result_html = result.to_html()
+    result_html = result.sort_values(by="price").to_html()
 
     return render_template("table.html", tables=[result_html])
 
