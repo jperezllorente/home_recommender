@@ -15,6 +15,13 @@ more than the price or the number of rooms of a house. Of course, I can check th
 to be able to check all this variables at the asme time. 
 
 ## Resources and Libraries
+For this project I have used Python, HTML and MongoDB, and the following python libraries:
+
+- For data cleaning and manipulation -> Pandas, NumPy, Regex
+- For API extraction -> requests, json
+- For API creation -> Flask
+- For visualizations and maps -> folium 
+
 
 ## Process
 
